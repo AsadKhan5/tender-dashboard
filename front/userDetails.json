@@ -1,0 +1,6 @@
+{
+  "TANK-RS 1": [{ "deviceId": "ENE02796", "serialNumber": "2310007105125", "latitude": "27.88", "longitude": "98.08", "address": "MEERUT" }],
+  "TANK-RS 2": [{ "deviceId": "ENE03258", "serialNumber": "2401007106170", "latitude": "27.88", "longitude": "98.08", "address": "aligarh" }],
+  "TANK-RS 4 ": [{ "deviceId": "ENE02795", "serialNumber": "2310007105124", "latitude": "27.88", "longitude": "98.08", "address": "MEERUT" }],
+  "AS-1 TANK": [{ "deviceId": "ENE03257", "serialNumber": "2401007106169", "latitude": "27.88", "longitude": "98.08", "address": "aligarh" }]
+}

@@ -1,0 +1,114 @@
+.inputWrapper {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #e9f0fe;
+  padding: 0.8rem;
+  border-radius: 10px;
+  /* border: 2px solid transparent; */
+  overflow: hidden;
+}
+
+.inputWrapper::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  left: -50%;
+  top: -50%;
+  width: 200%;
+  height: 200%;
+  background-color: #e9f0fe;
+  background-repeat: no-repeat;
+  background-size: 0% 0%;
+  background-position: 0 0;
+  background-image: linear-gradient(#e9f0fe, #e9f0fe);
+
+  /* transform: rotate(1turn); */
+}
+
+.inputWrapper::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 3px;
+  top: 3px;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  background: white;
+  border-radius: 8px;
+}
+
+.inputWrapper input::placeholder {
+  opacity: 0;
+}
+
+.inputWrapper label {
+  position: absolute;
+  font-size: 1.2rem;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  transition: 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  color: #65778b;
+  /* letter-spacing: 2px; */
+  z-index: 2;
+  cursor: auto;
+}
+
+.inputWrapper input {
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  padding: 15px 20px;
+  border-radius: 10px;
+  padding-bottom: 0px;
+}
+
+.inputWrapper input:focus + label,
+.inputWrapper input:not(:placeholder-shown) + label {
+  top: 15px;
+  font-size: 0.8rem;
+  letter-spacing: 0px;
+}
+
+.inputWrapper:has(input:focus)::before {
+  /* border: 2px solid var(--primary); */
+  animation: rotate 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation-fill-mode: forwards;
+  /* background-image: linear-gradient(#a5c0f122, #a5c0f1);
+  background-size: 82% 108%; */
+}
+
+@keyframes rotate {
+  /* 50% {
+    background-image: linear-gradient(#a5c0f122, #a5c0f1);
+    background-size: 82% 108%;
+  } */
+  100% {
+    background-image: linear-gradient(#a5c0f122, #a5c0f1);
+    /* transform: rotate(1turn); */
+    background-size: 82% 108%;
+    /* box-shadow: 0 5px 15px #1c61e2; */
+  }
+}
+
+.showPassword {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  background-color: transparent !important;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary);
+}
+
+.showPassword:hover {
+  outline: none;
+  border: none;
+}
