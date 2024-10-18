@@ -1,6 +1,4 @@
 import React, { useRef } from "react";
-import Logo from "../../../img/logo.jpg";
-import "./Login.css";
 import TextInput from "../../TextInput/TextInput";
 
 import { useStore } from "../../../../store/Store";
@@ -27,37 +25,56 @@ function Login() {
     let __password = password.current.value;
 
     LoginUser(__email, __password).then(async (res) => {
-      console.log(res);
-      if (res.status === 422 || res.status === 401) {
-        return res;
+      try {
+        // First, check if the response is ok (status 2xx)
+        if (!res.ok) {
+          if (res.status === 422 || res.status === 401) {
+            alert("Invalid credentials provided.");
+            return res; // Return the response for further handling, if needed.
+          }
+
+          // Handle other non-success cases
+          alert(
+            "An error occurred. Please check your credentials and try again."
+          );
+          throw new Error("Failed to authenticate user.");
+        }
+
+        // Parse the response data
+        const resData = await res.json();
+
+        // Check if the API returned a success status
+        if (!resData?.status) {
+          alert(resData?.message || "Authentication failed.");
+          throw new Error(resData?.message || "Failed to authenticate user.");
+        }
+
+        // Extract token and save it
+        const token = resData.token;
+        localStorage.setItem("token", token);
+
+        // Set expiration for the token (1 hour from now)
+        const expiration = new Date();
+        expiration.setHours(expiration.getHours() + 1);
+        localStorage.setItem("expiration", expiration.toISOString());
+
+        // Store additional user info in localStorage
+        delete resData.msg; // Clean up response data if necessary
+        localStorage.setItem("userInfo", JSON.stringify(resData));
+        localStorage.setItem("userRole", resData.role);
+
+        // Redirect user based on role
+        if (resData.role === "user") {
+          navigate("/userPanel");
+        } else {
+          console.log("going to admin");
+          navigate("/tenderdashboard");
+        }
+      } catch (error) {
+        // Handle any additional errors
+        console.error("Error during login:", error);
+        alert("An error occurred during login. Please try again later.");
       }
-
-      if (!res.ok) {
-        throw json(
-          { message: "Could not authenticate user." },
-          { status: 500 }
-        );
-      }
-
-      const resData = await res.json();
-
-      console.log(resData);
-      if (!resData?.status) {
-        throw json({ message: resData?.message }, { status: 500 });
-      }
-
-      console.log(resData);
-      const token = resData.token;
-
-      delete resData.msg;
-
-      localStorage.setItem("token", token);
-      const expiration = new Date();
-      expiration.setHours(expiration.getHours() + 1);
-      localStorage.setItem("expiration", expiration.toISOString());
-      localStorage.setItem("userInfo", JSON.stringify(resData));
-
-      navigate("/tenderdashboard");
     });
   };
 

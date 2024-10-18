@@ -27,28 +27,6 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-const authenticateAnalyzer = async (req, res, next) => {
-  try {
-    const acessToken = req.headers.authorization.split(" ")[1];
-    if (!acessToken) {
-      throw new CustomError.UnauthorizedError(
-        "Not authorized Please Login again"
-      );
-    }
-
-    if (acessToken) {
-      const payload = jwt.verify(acessToken, process.env.PRIVATE_KEY);
-      req.analyzerInfo = payload;
-      return next();
-    }
-    next();
-  } catch (error) {
-    throw new CustomError.UnauthenticatedError(
-      `Authentication Invalid ${error}`
-    );
-  }
-};
-
 const authorizePermissions = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -63,5 +41,4 @@ const authorizePermissions = (...roles) => {
 module.exports = {
   authenticateUser,
   authorizePermissions,
-  authenticateAnalyzer,
 };

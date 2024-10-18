@@ -22,17 +22,11 @@ const createBidController = async (req, res) => {
       isLastFiveMinutesFlag || 0,
     ];
 
-    const { lastID } = await new Promise((resolve, reject) => {
-      db.run(query, params, function (err) {
-        if (err) reject(err);
-        resolve({ lastID: this.lastID });
-      });
-    });
+    await db.execute(query, params);
 
-    res
-      .status(201)
-      .json({ message: "Bid created successfully", bidId: lastID });
+    res.status(201).json({ message: "Bid created successfully" });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: "Error creating bid", error: err });
   }
 };
@@ -129,10 +123,22 @@ const deleteBidController = async (req, res) => {
   }
 };
 
+const getAllBids = async (req, res) => {
+  try {
+    const query = "SELECT * FROM bids ORDER BY bidCost DESC";
+    const [data] = await db.execute(query);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error fetching bids", error: error });
+  }
+};
+
 module.exports = {
   createBidController,
   getBidsByTenderController,
   getBidByIdController,
   updateBidController,
   deleteBidController,
+  getAllBids,
 };

@@ -9,6 +9,7 @@ function DashboardLayout() {
 
   const token = getAuthToken();
   const navigate = useNavigate();
+  const userRole = localStorage.getItem("userRole");
 
   // const actionData = useActionData();
 
@@ -30,8 +31,7 @@ function DashboardLayout() {
             </div>
           </div>
         </div>
-
-        <Sidebar />
+        {userRole == "admin" ? <Sidebar /> : null}
       </div>
     </div>
   );

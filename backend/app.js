@@ -4,8 +4,6 @@ require("express-async-errors");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const notFoundMiddleware = require("./middleware/not-found");
 const authRoutes = require("./routes/authRoute");
@@ -34,15 +32,7 @@ const corsOptions = {
 
 // Enable CORS with the options
 app.use(cors(corsOptions));
-app.use(express.json({ limit: "5mb" }));
-
 app.use(bodyParser.json());
-app.use(cookieParser());
-
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// Serve static files from the "public" directory
-app.use(express.static("./public"));
 
 // Define a test route to verify deployment success
 app.get("/", (req, res) => res.status(200).json("Deployment is successful!"));

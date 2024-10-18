@@ -7,12 +7,14 @@ function AuthLayout() {
   const token = getAuthToken();
   // const submit = useSubmit();
   const navigation = useNavigate();
+  const userRole = localStorage.getItem("userRole");
   useEffect(() => {
     if (!token || token === "EXPIRED") {
       navigation("/login");
       // return;
     } else {
-      navigation("/tenderdashboard");
+      if (userRole == "admin") navigation("/tenderdashboard");
+      else navigation("/userPanel");
       // return;
     }
 

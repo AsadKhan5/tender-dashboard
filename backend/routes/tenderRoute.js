@@ -10,7 +10,7 @@ const {
 } = require("../controller/TenderCntroller");
 
 // CREATE: Add a new tender
-router.post("/tenders", createTenderController);
+router.post("/tenders-create", createTenderController);
 
 // READ: Get all tenders
 router.get("/tenders", getAllTenderController);

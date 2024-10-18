@@ -1,53 +1,65 @@
 const db = require("../utils/connecton");
 
-const createTenderController = (req, res) => {
-  const {
-    name,
-    description,
-    startTime,
-    endTime,
-    bufferTime,
-    status,
-    createdBy,
-  } = req.body;
+const createTenderController = async (req, res) => {
+  try {
+    let {
+      name,
+      description,
+      startTime,
+      endTime,
+      bufferTime,
+      status,
+      createdBy,
+    } = req.body;
 
-  if (!name || !startTime || !endTime || !createdBy) {
-    return res.status(400).json({ message: "Missing required fields" });
+    // Default value for `createdBy` if not provided
+    if (!createdBy) {
+      createdBy = "me"; // Default to "me" if createdBy is not provided
+    }
+    // Validate required fields
+    if (!name || !startTime || !endTime || !createdBy) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // SQL query to insert a new tender
+    const query = `
+      INSERT INTO tenders (name, description, startTime, endTime, bufferTime, status, createdBy)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    // Prepare parameters for the query
+    const params = [
+      name,
+      description || null, // Default to null if description is not provided
+      startTime,
+      endTime,
+      bufferTime || null, // Default to null if bufferTime is not provided
+      status || "open", // Default status to 'open' if not provided
+      createdBy,
+    ];
+
+    // Execute the SQL query
+    await db.execute(query, params);
+    res.status(201).json({
+      message: "Tender created successfully",
+      tenderId: this.lastID, // Assuming `this.lastID` gives the ID of the inserted record
+    });
+  } catch (error) {
+    // Catch any unexpected errors and return a 500 status with the error message
+    console.error("Unexpected error:", error);
+    return res
+      .status(500)
+      .json({ message: "Error creating tender", error: error.message });
   }
-
-  const query = `
-        INSERT INTO tenders (name, description, startTime, endTime, bufferTime, status, createdBy)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `;
-  const params = [
-    name,
-    description,
-    startTime,
-    endTime,
-    bufferTime,
-    status || "open",
-    createdBy,
-  ];
-
-  db.run(query, params, function (err) {
-    if (err)
-      return res
-        .status(500)
-        .json({ message: "Error creating tender", error: err });
-    res
-      .status(201)
-      .json({ message: "Tender created successfully", tenderId: this.lastID });
-  });
 };
 
-const getAllTenderController = (req, res) => {
-  db.all("SELECT * FROM tenders", [], (err, rows) => {
-    if (err)
-      return res
-        .status(500)
-        .json({ message: "Error retrieving tenders", error: err });
-    res.json(rows);
-  });
+const getAllTenderController = async (req, res) => {
+  try {
+    const [rows] = await db.execute("SELECT * FROM tenders");
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 };
 
 const getSingleTenderById = (req, res) => {

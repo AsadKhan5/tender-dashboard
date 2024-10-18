@@ -51,7 +51,13 @@ const registerUserController = async (req, res) => {
       { expiresIn: "3d" }
     );
 
-    res.status(201).json({ message: "User registered successfully", token });
+    res.status(201).json({
+      message: "User registered successfully",
+      token,
+      email: newUser.email,
+      role: newUser.role,
+      mobile: newUser.mobile,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error registering user", error: err });
@@ -97,7 +103,14 @@ const loginUserController = async (req, res) => {
       }
     );
 
-    res.json({ status: true, token, message: "success" });
+    res.json({
+      status: true,
+      token,
+      message: "success",
+      email: user.email,
+      role: user.role,
+      mobile: user.mobile,
+    });
   } catch (err) {
     res
       .status(500)

@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import { RiDashboard2Fill } from "react-icons/ri";
 import { CiLogout } from "react-icons/ci";
 import { FaCircleUser } from "react-icons/fa6";
-// import logo from "/hawkeye-iot-logo2.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoSunny, IoMoon } from "react-icons/io5";
-import logo from "../img/logo.jpg";
 import { VscSettings } from "react-icons/vsc";
-import { TbReportAnalytics } from "react-icons/tb";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -33,7 +30,13 @@ const Sidebar = () => {
         className="drawer-overlay"
       ></label>
       <div className="flex flex-col justify-between gap-5 menu p-1 w-80 min-h-full bg-primary text-base dark:border-base-200 transition-all h-screen z-50 relative">
-        <div className="flex flex-col gap-3 justify-center items-center py-10 p-5 text-neutral"></div>
+        <div className="flex flex-col gap-1 justify-center items-center pt-10 text-white">
+          <h1 className="text-5xl font-light font-mono">Tender</h1>
+          <h2 className="text-xl font-semibold font-mono">
+            Managewment system
+          </h2>
+        </div>
+
         <ul className="p-5 flex flex-col gap-2 overflow-y-auto h-[calc(100vh-350px)] custom-scrollbar text-white">
           <li>
             <NavLink

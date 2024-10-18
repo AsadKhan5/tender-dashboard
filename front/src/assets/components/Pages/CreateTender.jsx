@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createNewTenderApi } from "../../../utils/ENE_Api";
 
 const CreateTender = () => {
   const [tenderName, setTenderName] = useState("");
@@ -7,26 +8,53 @@ const CreateTender = () => {
   const [endTime, setEndTime] = useState("");
   const [bufferTime, setBufferTime] = useState("");
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+  const createTender = async (tenderData) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/tender/tenders-create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(tenderData),
+          credentials: "include", // If sending cookies/tokens
+        }
+      );
 
-    const tenderData = {
+      if (!response.ok) {
+        throw new Error("Failed to create tender");
+      }
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error("Error creating tender:", error);
+    }
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const response = await createNewTenderApi(
       tenderName,
       tenderDescription,
       startTime,
       endTime,
-      bufferTime,
-    };
-
-    console.log("Tender Created:", tenderData);
-    // You can handle the submission, such as sending it to an API or backend server here.
-
+      bufferTime
+    );
+    console.log(response);
+    const data = await response.json();
+    if (response.status == 201) {
+      alert(data.message);
+    } else {
+      alert("something went wrong !");
+    }
     // Reset form after submission
-    setTenderName("");
-    setTenderDescription("");
-    setStartTime("");
-    setEndTime("");
-    setBufferTime("");
+    // setTenderName("");
+    // setTenderDescription("");
+    // setStartTime("");
+    // setEndTime("");
+    // setBufferTime("");
   };
 
   return (
